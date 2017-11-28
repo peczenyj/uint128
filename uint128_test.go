@@ -80,29 +80,29 @@ func TestUint128Operations(t *testing.T) {
 	}
 }
 
-func TestFormat(t *testing.T) {
-	testCases := []struct {
-		input uint128.Uint128
-	}{
-		{
-			uint128.Uint128{H: 0x0, L: 0x456},
-		},
-		{
-			uint128.Uint128{H: 0x1, L: 0x456},
-		},
-	}
-
-	for _, testCase := range testCases {
-		t.Run(testCase.input.String(), func(t *testing.T) {
-			t.Logf("%v", testCase.input)
-			t.Logf("%+v", testCase.input)
-			t.Logf("%#v", testCase.input)
-			t.Logf("%T", testCase.input)
-			t.Logf("%b", testCase.input)
-			t.Logf("%d", testCase.input)
-			t.Logf("%o", testCase.input)
-			t.Logf("%x", testCase.input)
-			t.Logf("%X", testCase.input)
-		})
-	}
-}
+// func TestFormat(t *testing.T) {
+// 	testCases := []struct {
+// 		input uint128.Uint128
+// 	}{
+// 		{
+// 			uint128.Uint128{H: 0x0, L: 0x456},
+// 		},
+// 		{
+// 			uint128.Uint128{H: 0x1, L: 0x456},
+// 		},
+// 	}
+//
+// 	for _, testCase := range testCases {
+// 		t.Run(testCase.input.String(), func(t *testing.T) {
+// 			t.Logf("%%v: \t%v", testCase.input)
+// 			t.Logf("%%+v:\t%+v", testCase.input)
+// 			t.Logf("%%#v:\t%#v", testCase.input)
+// 			t.Logf("%%T:\t%T", testCase.input)
+// 			t.Logf("%%b:\t%b", testCase.input)
+// 			t.Logf("%%d:\t%d", testCase.input)
+// 			t.Logf("%%o:\t%o", testCase.input)
+// 			t.Logf("%%x:\t%x", testCase.input)
+// 			t.Logf("%%X:\t%X", testCase.input)
+// 		})
+// 	}
+// }
