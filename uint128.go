@@ -14,16 +14,19 @@ import (
 	"math/bits"
 )
 
-var (
-	// Zero is a 0 valued Uint128
-	Zero = Uint128{0x0, 0x0}
-	// MaxUint128 defines the maximum value for an Uint128
-	MaxUint128 = Uint128{0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF}
-)
-
 // Uint128 defines an unsigned integer of 128 bits
 type Uint128 struct {
 	H, L uint64
+}
+
+// Zero is a 0 valued Uint128
+func Zero() Uint128 {
+	return Uint128{}
+}
+
+// MaxUint128 returns a maximum valued Uint128
+func MaxUint128() Uint128 {
+	return Uint128{0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF}
 }
 
 // Cmp compares two Uint128 and returns one of the following values:
@@ -84,7 +87,7 @@ func (x Uint128) Incr() Uint128 {
 	return Incr(x)
 }
 
-// Sub substracts x and o
+// Sub subtracts x and o
 func (x Uint128) Sub(y Uint128) Uint128 {
 	return Sub(x, y)
 }
@@ -127,11 +130,12 @@ func (x Uint128) String() string {
 func (x Uint128) Format(f fmt.State, c rune) {
 	switch c {
 	case 'v':
-		if f.Flag('+') {
+		switch {
+		case f.Flag('+'):
 			fmt.Fprintf(f, "(%+v, %+v)", x.H, x.L)
-		} else if f.Flag('#') {
+		case f.Flag('#'):
 			fmt.Fprintf(f, "(%#v, %#v)", x.H, x.L)
-		} else {
+		default:
 			fmt.Fprintf(f, "(%v, %v)", x.H, x.L)
 		}
 	case 'T':
@@ -176,13 +180,14 @@ func IsZero(x Uint128) bool {
 
 // ShiftLeft shifts x to the left by the provided number of bits.
 func ShiftLeft(x Uint128, b uint) Uint128 {
-	if b >= 128 {
+	switch {
+	case b >= 128:
 		x.H = 0
 		x.L = 0
-	} else if b >= 64 {
+	case b >= 64:
 		x.H = x.L << (b - 64)
 		x.L = 0
-	} else {
+	default:
 		x.H <<= b
 		x.H |= x.L >> (64 - b)
 		x.L <<= b
@@ -192,13 +197,14 @@ func ShiftLeft(x Uint128, b uint) Uint128 {
 
 // ShiftRight shifts x to the right by the provided number of bits.
 func ShiftRight(x Uint128, b uint) Uint128 {
-	if b >= 128 {
+	switch {
+	case b >= 128:
 		x.H = 0
 		x.L = 0
-	} else if b >= 64 {
+	case b >= 64:
 		x.L = x.H >> (b - 64)
 		x.H = 0
-	} else {
+	default:
 		x.L >>= b
 		x.L |= x.H << (64 - b)
 		x.H >>= b
@@ -262,7 +268,7 @@ func Incr(x Uint128) Uint128 {
 	return x
 }
 
-// Sub substracts x and y
+// Sub subtracts x and y
 func Sub(x, y Uint128) Uint128 {
 	pL := x.L
 	x.L -= y.L

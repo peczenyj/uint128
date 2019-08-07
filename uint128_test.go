@@ -51,6 +51,7 @@ func TestUint128Operations(t *testing.T) {
 	for _, testCase := range testCases {
 		var rval int
 		var ruint uint128.Uint128
+		testCase := testCase
 		t.Run(testCase.input.String(), func(t *testing.T) {
 			rval = uint128.Len(testCase.input)
 			if rval != testCase.expectedLen {
