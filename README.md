@@ -1,5 +1,10 @@
+# github.com/weborama/uint128
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/weborama/uint128)](https://goreportcard.com/report/github.com/weborama/uint128)
+
 This package provides an implementation of a 128 bit unsigned integer with some
 implementations of:
+
 - arithmetic operators (Add, Sub, Incr, Decr)
 - binary operations (AND, OR, XOR, NOT, AND NOT, shifts)
 - math/bits operations (LeadingZeros, Len, OnesCount, Reverse, ReverseBytes, TrailingZeros)
