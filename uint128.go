@@ -100,6 +100,7 @@ func (x Uint128) Decr() Uint128 {
 // NewFromString creates a new Uint128 from its string representation
 func NewFromString(s string) (x Uint128, err error) {
 	x = Uint128{0, 0}
+
 	if len(s) > 32 {
 		return x, fmt.Errorf("s:%s length greater than 32", s)
 	}
@@ -108,8 +109,10 @@ func NewFromString(s string) (x Uint128, err error) {
 	if err != nil {
 		return x, err
 	}
+
 	rdr := bytes.NewReader(b)
 	err = binary.Read(rdr, binary.BigEndian, &x)
+
 	return
 }
 
@@ -118,6 +121,7 @@ func (x Uint128) HexString() string {
 	if x.H == 0 {
 		return fmt.Sprintf("%x", x.L)
 	}
+
 	return fmt.Sprintf("%x%016x", x.H, x.L)
 }
 
@@ -126,7 +130,7 @@ func (x Uint128) String() string {
 }
 
 // Format is a custom formatter for Uint128
-// TODO: Do a proper job of it.
+// XXX: Do a proper job of it.
 func (x Uint128) Format(f fmt.State, c rune) {
 	switch c {
 	case 'v':
@@ -192,6 +196,7 @@ func ShiftLeft(x Uint128, b uint) Uint128 {
 		x.H |= x.L >> (64 - b)
 		x.L <<= b
 	}
+
 	return x
 }
 
@@ -209,6 +214,7 @@ func ShiftRight(x Uint128, b uint) Uint128 {
 		x.L |= x.H << (64 - b)
 		x.H >>= b
 	}
+
 	return x
 }
 
@@ -216,6 +222,7 @@ func ShiftRight(x Uint128, b uint) Uint128 {
 func And(x, y Uint128) Uint128 {
 	x.H &= y.H
 	x.L &= y.L
+
 	return x
 }
 
@@ -223,6 +230,7 @@ func And(x, y Uint128) Uint128 {
 func AndNot(x, y Uint128) Uint128 {
 	x.H &^= y.H
 	x.L &^= y.L
+
 	return x
 }
 
@@ -230,6 +238,7 @@ func AndNot(x, y Uint128) Uint128 {
 func Not(x Uint128) Uint128 {
 	x.H = ^x.H
 	x.L = ^x.L
+
 	return x
 }
 
@@ -237,6 +246,7 @@ func Not(x Uint128) Uint128 {
 func Xor(x, y Uint128) Uint128 {
 	x.H ^= y.H
 	x.L ^= y.L
+
 	return x
 }
 
@@ -244,6 +254,7 @@ func Xor(x, y Uint128) Uint128 {
 func Or(x, y Uint128) Uint128 {
 	x.H |= y.H
 	x.L |= y.L
+
 	return x
 }
 
@@ -252,9 +263,11 @@ func Add(x, y Uint128) Uint128 {
 	pL := x.L
 	x.L += y.L
 	x.H += y.H
+
 	if x.L < pL {
 		x.H++
 	}
+
 	return x
 }
 
@@ -262,9 +275,11 @@ func Add(x, y Uint128) Uint128 {
 func Incr(x Uint128) Uint128 {
 	pL := x.L
 	x.L++
+
 	if x.L < pL {
 		x.H++
 	}
+
 	return x
 }
 
@@ -273,9 +288,11 @@ func Sub(x, y Uint128) Uint128 {
 	pL := x.L
 	x.L -= y.L
 	x.H -= y.H
+
 	if x.L > pL {
 		x.H--
 	}
+
 	return x
 }
 
@@ -283,9 +300,11 @@ func Sub(x, y Uint128) Uint128 {
 func Decr(x Uint128) Uint128 {
 	pL := x.L
 	x.L--
+
 	if x.L > pL {
 		x.H--
 	}
+
 	return x
 }
 
@@ -294,6 +313,7 @@ func Len(x Uint128) int {
 	if x.H == 0 {
 		return bits.Len64(x.L)
 	}
+
 	return 64 + bits.Len64(x.H)
 }
 
@@ -312,6 +332,7 @@ func TrailingZeros(x Uint128) int {
 	if x.L == 0 {
 		return bits.TrailingZeros64(x.H) + 64
 	}
+
 	return bits.TrailingZeros64(x.L)
 }
 

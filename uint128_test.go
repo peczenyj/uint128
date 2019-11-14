@@ -23,26 +23,16 @@ func TestUint128Operations(t *testing.T) {
 		expectedDecr          uint128.Uint128
 	}{
 		{
-			uint128.Uint128{H: 0x0, L: 0x456},
-			11,
-			117,
-			5,
-			1,
+			uint128.Uint128{H: 0x0, L: 0x456}, 11, 117, 5, 1,
 			uint128.Uint128{H: 0x6a20000000000000, L: 0x0},
 			uint128.Uint128{H: 0x5604000000000000, L: 0x0},
-			uint128.Uint128{H: 0x0, L: 0x456},
-			uint128.Uint128{H: 0x0, L: 0x456},
+			uint128.Uint128{H: 0x0, L: 0x456}, uint128.Uint128{H: 0x0, L: 0x456},
 		},
 		{
-			uint128.Uint128{H: 0x1, L: 0x456},
-			65,
-			63,
-			6,
-			1,
+			uint128.Uint128{H: 0x1, L: 0x456}, 65, 63, 6, 1,
 			uint128.Uint128{H: 0x6a20000000000000, L: 0x8000000000000000},
 			uint128.Uint128{H: 0x5604000000000000, L: 0x100000000000000},
-			uint128.Uint128{H: 0x1, L: 0x456},
-			uint128.Uint128{H: 0x1, L: 0x456},
+			uint128.Uint128{H: 0x1, L: 0x456}, uint128.Uint128{H: 0x1, L: 0x456},
 		},
 	}
 
@@ -50,7 +40,9 @@ func TestUint128Operations(t *testing.T) {
 
 	for _, testCase := range testCases {
 		var rval int
+
 		var ruint uint128.Uint128
+
 		testCase := testCase
 		t.Run(testCase.input.String(), func(t *testing.T) {
 			rval = uint128.Len(testCase.input)
