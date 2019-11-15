@@ -11,7 +11,7 @@ implementations of:
 
 Missing operators (Mult, Div, Mod, RotateLeft etc.) to be added later.
 
-Uses a modified copy (changes to the generated package declaration) of make_tables.go from [math/bits](https://github.com/golang/go/tree/master/src/math/bits).
+Uses a modified copy (changes to the generated package declaration) of make_tables.go from [math/bits](https://github.com/golang/go/tree/master/src/math/bits) as well as code sourced from [github.com/mengzhuo/uint128](https://github.com/mengzhuo/uint128) and [github.com/davidminor/uint128](https://github.com/davidminor/uint128).
 
 Original use case for this package is implementing IPv6 calculations (see
 [github.com/weborama/cidr](http://github.com/weborama/cidr)).
