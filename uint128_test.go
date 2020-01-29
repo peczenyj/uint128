@@ -10,6 +10,7 @@ import (
 	"github.com/weborama/uint128"
 )
 
+// nolint:gomnd
 func TestUint128Operations(t *testing.T) {
 	testCases := []struct {
 		input                 uint128.Uint128

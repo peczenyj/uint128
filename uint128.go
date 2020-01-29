@@ -11,6 +11,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"math"
 	"math/bits"
 )
 
@@ -26,7 +27,7 @@ func Zero() Uint128 {
 
 // MaxUint128 returns a maximum valued Uint128
 func MaxUint128() Uint128 {
-	return Uint128{0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF}
+	return Uint128{math.MaxUint64, math.MaxUint64}
 }
 
 // Cmp compares two Uint128 and returns one of the following values:
@@ -97,11 +98,13 @@ func (x Uint128) Decr() Uint128 {
 	return Decr(x)
 }
 
+const numUint128Bytes = 32
+
 // NewFromString creates a new Uint128 from its string representation
 func NewFromString(s string) (x Uint128, err error) {
 	x = Uint128{0, 0}
 
-	if len(s) > 32 {
+	if len(s) > numUint128Bytes {
 		return x, fmt.Errorf("s:%s length greater than 32", s)
 	}
 
@@ -157,21 +160,26 @@ func (x Uint128) Format(f fmt.State, c rune) {
 	}
 }
 
+const (
+	lowerThan  = -1
+	higherThan = 1
+)
+
 // Cmp compares two Uint128 and returns one of the following values:
 //   -1 if x <  y
 //    0 if x == y
 //   +1 if x >  y
 func Cmp(x, y Uint128) int {
 	if x.H < y.H {
-		return -1
+		return lowerThan
 	} else if x.H > y.H {
-		return 1
+		return higherThan
 	}
 
 	if x.L < y.L {
-		return -1
+		return lowerThan
 	} else if x.L > y.L {
-		return 1
+		return higherThan
 	}
 
 	return 0
@@ -182,13 +190,18 @@ func IsZero(x Uint128) bool {
 	return x.H == 0 && x.L == 0
 }
 
+const (
+	bits128 = 128
+	bits64  = 64
+)
+
 // ShiftLeft shifts x to the left by the provided number of bits.
 func ShiftLeft(x Uint128, b uint) Uint128 {
 	switch {
-	case b >= 128:
+	case b >= bits128:
 		x.H = 0
 		x.L = 0
-	case b >= 64:
+	case b >= bits64:
 		x.H = x.L << (b - 64)
 		x.L = 0
 	default:
@@ -203,10 +216,10 @@ func ShiftLeft(x Uint128, b uint) Uint128 {
 // ShiftRight shifts x to the right by the provided number of bits.
 func ShiftRight(x Uint128, b uint) Uint128 {
 	switch {
-	case b >= 128:
+	case b >= bits128:
 		x.H = 0
 		x.L = 0
-	case b >= 64:
+	case b >= bits64:
 		x.L = x.H >> (b - 64)
 		x.H = 0
 	default:
