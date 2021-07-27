@@ -5,6 +5,7 @@
 package uint128_test
 
 import (
+	"math"
 	"testing"
 
 	"github.com/weborama/uint128"
@@ -70,6 +71,131 @@ func TestUint128Operations(t *testing.T) {
 				t.Fatalf("ReverseBytes - Expected:%v Got:%v", testCase.expectedReverseBytes, ruint)
 			}
 		})
+	}
+}
+
+func TestAdd128(t *testing.T) {
+	testcases := []struct {
+		label         string
+		x, y, carry   uint128.Uint128
+		sum, carryOut uint128.Uint128
+	}{
+		{
+			label: "zero sum should result zero",
+			x:     uint128.Zero(),
+			y:     uint128.Zero(),
+			sum:   uint128.Zero(),
+		},
+		{
+			label: "zero+1 sum should result 1",
+			x:     uint128.Zero(),
+			y:     uint128.Uint128{H: 0, L: 1},
+			sum:   uint128.Uint128{H: 0, L: 1},
+		},
+		{
+			label: "1+ maxuint64 sum should overflow from Low to High",
+			x:     uint128.Uint128{H: 0, L: 1},
+			y:     uint128.Uint128{H: 0, L: math.MaxUint64},
+			sum:   uint128.Uint128{H: 1, L: 0},
+		},
+		{
+			label:    "1+ maxuint128 sum should overflow",
+			x:        uint128.Uint128{H: 0, L: 1},
+			y:        uint128.MaxUint128(),
+			sum:      uint128.Uint128{H: 0, L: 0},
+			carryOut: uint128.Uint128{H: 0, L: 1},
+		},
+	}
+
+	for _, tc := range testcases {
+		tc := tc
+		t.Run(tc.label, func(t *testing.T) {
+			sum, carryOut := uint128.Add128(tc.x, tc.y, tc.carry)
+
+			assert(t, sum, tc.sum, "unexpected sum")
+			assert(t, carryOut, tc.carryOut, "unexpected carryOut")
+		})
+	}
+}
+
+func TestAdd(t *testing.T) {
+	testcases := []struct {
+		label string
+		x, y  uint128.Uint128
+		sum   uint128.Uint128
+	}{
+		{
+			label: "zero sum should result zero",
+			x:     uint128.Zero(),
+			y:     uint128.Zero(),
+			sum:   uint128.Zero(),
+		},
+		{
+			label: "zero+1 sum should result 1",
+			x:     uint128.Zero(),
+			y:     uint128.Uint128{H: 0, L: 1},
+			sum:   uint128.Uint128{H: 0, L: 1},
+		},
+		{
+			label: "1+ maxuint64 sum should overflow from Low to High",
+			x:     uint128.Uint128{H: 0, L: 1},
+			y:     uint128.Uint128{H: 0, L: math.MaxUint64},
+			sum:   uint128.Uint128{H: 1, L: 0},
+		},
+		{
+			label: "1+ maxuint128 sum should overflow",
+			x:     uint128.Uint128{H: 0, L: 1},
+			y:     uint128.MaxUint128(),
+			sum:   uint128.Uint128{H: 0, L: 0},
+		},
+	}
+
+	for _, tc := range testcases {
+		tc := tc
+		t.Run(tc.label, func(t *testing.T) {
+			sum := tc.x.Add(tc.y)
+
+			assert(t, sum, tc.sum, "unexpected sum")
+		})
+	}
+}
+
+func TestIncr(t *testing.T) {
+	testcases := []struct {
+		label string
+		x     uint128.Uint128
+		incr  uint128.Uint128
+	}{
+		{
+			label: "zero+1 sum should result 1",
+			x:     uint128.Zero(),
+			incr:  uint128.Uint128{H: 0, L: 1},
+		},
+		{
+			label: "maxuint64+1 sum should overflow from Low to High",
+			x:     uint128.Uint128{H: 0, L: math.MaxUint64},
+			incr:  uint128.Uint128{H: 1, L: 0},
+		},
+		{
+			label: "maxuint128+1 sum should overflow",
+			x:     uint128.MaxUint128(),
+			incr:  uint128.Uint128{H: 0, L: 0},
+		},
+	}
+
+	for _, tc := range testcases {
+		tc := tc
+		t.Run(tc.label, func(t *testing.T) {
+			incr := tc.x.Incr()
+
+			assert(t, incr, tc.incr, "unexpected incr")
+		})
+	}
+}
+
+func assert(t *testing.T, got, expected uint128.Uint128, message string) {
+	if got != expected {
+		t.Errorf("error: %s (got: %v, expected: %v)", message, got, expected)
 	}
 }
 

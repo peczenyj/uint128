@@ -260,27 +260,24 @@ func Or(x, y Uint128) Uint128 {
 
 // Add adds x and y
 func Add(x, y Uint128) Uint128 {
-	pL := x.L
-	x.L += y.L
-	x.H += y.H
+	sum, _ := Add128(x, y, Zero())
 
-	if x.L < pL {
-		x.H++
-	}
+	return sum
+}
 
-	return x
+// Add128 returns the sum with carry of x, y and carry: sum = x + y + carry.
+// The carry input must be 0 or 1; otherwise the behavior is undefined.
+// The carryOut output is guaranteed to be 0 or 1.
+func Add128(x, y, carry Uint128) (sum, carryOut Uint128) {
+	sum.L, carryOut.L = bits.Add64(x.L, y.L, carry.L)
+	sum.H, carryOut.L = bits.Add64(x.H, y.H, carryOut.L)
+
+	return
 }
 
 // Incr increments x by one
 func Incr(x Uint128) Uint128 {
-	pL := x.L
-	x.L++
-
-	if x.L < pL {
-		x.H++
-	}
-
-	return x
+	return Add(x, Uint128{L: 1})
 }
 
 // Sub subtracts x and y
