@@ -82,6 +82,14 @@ func (x Uint128) Add(y Uint128) Uint128 {
 	return Add(x, y)
 }
 
+// Add128 returns the sum with carry of x, y and carry: sum = x + y + carry.
+// The carry input must be 0 or 1; otherwise the behavior is undefined.
+// The carryOut output is guaranteed to be 0 or 1.
+func (x Uint128) Add128(y, carry Uint128) (sum, carryOut Uint128) {
+	sum, carryOut = Add128(x, y, carry)
+	return
+}
+
 // Incr increments x by one
 func (x Uint128) Incr() Uint128 {
 	return Incr(x)

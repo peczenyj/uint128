@@ -110,7 +110,7 @@ func TestAdd128(t *testing.T) {
 	for _, tc := range testcases {
 		tc := tc
 		t.Run(tc.label, func(t *testing.T) {
-			sum, carryOut := uint128.Add128(tc.x, tc.y, tc.carry)
+			sum, carryOut := tc.x.Add128(tc.y, tc.carry)
 
 			assert(t, sum, tc.sum, "unexpected sum")
 			assert(t, carryOut, tc.carryOut, "unexpected carryOut")
